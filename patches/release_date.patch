@@ -1,0 +1,70 @@
+diff --git a/app/src/main/java/org/jellyfin/androidtv/ui/playback/CustomPlaybackOverlayFragment.java b/app/src/main/java/org/jellyfin/androidtv/ui/playback/CustomPlaybackOverlayFragment.java
+index 4138bbc8d..06abcf1b5 100644
+--- a/app/src/main/java/org/jellyfin/androidtv/ui/playback/CustomPlaybackOverlayFragment.java
++++ b/app/src/main/java/org/jellyfin/androidtv/ui/playback/CustomPlaybackOverlayFragment.java
+@@ -91,6 +91,7 @@ import org.jellyfin.sdk.model.api.BaseItemKind;
+ import org.jellyfin.sdk.model.api.ChapterInfo;
+ import org.koin.java.KoinJavaComponent;
+ 
++import java.text.SimpleDateFormat;
+ import java.util.ArrayList;
+ import java.util.Calendar;
+ import java.util.Date;
+@@ -1414,6 +1415,12 @@ public class CustomPlaybackOverlayFragment extends Fragment implements LiveTvGui
+             } else {
+                 binding.itemTitle.setText(current.getName());
+             }
++
++            Date premieredDate = TimeUtils.getDate(current.getPremiereDate());
++            SimpleDateFormat dateFormat = new SimpleDateFormat("LLL d, y.");
++            String premDateString = dateFormat.format(premieredDate);
++            binding.itemPremiereDate.setText("Released on " + premDateString);
++
+             // Update the logo
+             String imageUrl = ImageUtils.getLogoImageUrl(current, 440, false);
+             if (imageUrl != null) {
+diff --git a/app/src/main/res/layout/vlc_player_interface.xml b/app/src/main/res/layout/vlc_player_interface.xml
+index f67e6771e..eb16fcbdd 100644
+--- a/app/src/main/res/layout/vlc_player_interface.xml
++++ b/app/src/main/res/layout/vlc_player_interface.xml
+@@ -80,7 +80,7 @@
+     <androidx.constraintlayout.widget.ConstraintLayout
+         android:id="@+id/topPanel"
+         android:layout_width="fill_parent"
+-        android:layout_height="155dp"
++        android:layout_height="222dp"
+         android:layout_gravity="center_horizontal|top"
+         android:layout_marginHorizontal="40dp"
+         android:layout_marginTop="20dp"
+@@ -128,6 +128,18 @@
+             app:layout_constraintTop_toBottomOf="@id/item_title"
+             tools:text="Subtitle" />
+ 
++        <TextView
++            android:id="@+id/item_premiere_date"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:textColor="@color/white"
++            android:textSize="13sp"
++            app:layout_constraintEnd_toStartOf="@id/textClock"
++            app:layout_constraintHorizontal_bias="0.0"
++            app:layout_constraintStart_toStartOf="parent"
++            app:layout_constraintTop_toBottomOf="@id/item_subtitle"
++            tools:text="Subtitle" />
++
+         <org.jellyfin.androidtv.ui.ClockUserView
+             android:id="@+id/textClock"
+             android:layout_width="wrap_content"
+diff --git a/gradle/libs.versions.toml b/gradle/libs.versions.toml
+index b8b158bbd..48c6acd0d 100644
+--- a/gradle/libs.versions.toml
++++ b/gradle/libs.versions.toml
+@@ -2,7 +2,7 @@
+ aboutlibraries = "11.1.1"
+ acra = "5.11.3"
+ android-desugar = "2.0.4"
+-android-gradle = "8.3.1"
++android-gradle = "8.0.1"
+ androidx-activity = "1.8.2"
+ androidx-appcompat = "1.6.1"
+ androidx-cardview = "1.0.0"
